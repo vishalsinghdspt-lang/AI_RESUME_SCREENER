@@ -1,11 +1,15 @@
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
-model = SentenceTransformer(
-    "all-MiniLM-L6-v2"
-)
+model = None
 
 def get_ai_score(resume_text, jd_text):
+    global model
+
+    if model is None:
+        model = SentenceTransformer(
+            "all-MiniLM-L6-v2"
+        )
 
     resume_embedding = model.encode(resume_text)
     jd_embedding = model.encode(jd_text)
@@ -16,5 +20,5 @@ def get_ai_score(resume_text, jd_text):
     )[0][0]
 
     return float(
-    round(similarity * 100, 2)
-)
+        round(similarity * 100, 2)
+    )
