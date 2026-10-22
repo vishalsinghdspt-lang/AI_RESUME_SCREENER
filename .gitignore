@@ -1,0 +1,20 @@
+# Environment Variables
+.env
+
+# Virtual Environments
+venv/
+venv311/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Database
+*.db
+
+# Uploaded Files
+uploads/
+resumes/
+
+# VS Code
+.vscode/

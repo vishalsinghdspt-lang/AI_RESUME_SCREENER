@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Resume Screener</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🚀 AI Resume Screener</h1>
+
+    <div class="badge">
+        AI Powered Recruitment Assistant
+    </div>
+
+    <p class="subtitle">
+        Find the best candidate using AI-powered resume matching
+    </p>
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <h2>95%</h2>
+            <p>Resume Accuracy</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>AI</h2>
+            <p>Semantic Matching</p>
+        </div>
+
+    </div>
+
+    <!-- Upload Form -->
+    <form
+        action="/upload"
+        method="post"
+        enctype="multipart/form-data">
+
+        <div class="upload-box">
+            <h3>📄 Upload Resume</h3>
+
+            <input
+                type="file"
+                name="resumes"
+                multiple
+                required>
+        </div>
+
+        <div class="upload-box">
+            <h3>💼 Upload Job Description</h3>
+
+            <input
+                type="file"
+                name="job"
+                required>
+        </div>
+
+        <button type="submit">
+            Screen Candidate
+        </button>
+
+    </form>
+
+    <br><br>
+
+    <!-- Leaderboard Button -->
+    <a href="/leaderboard">
+        <button
+            type="button"
+            class="leaderboard-btn">
+
+            🏆 View Leaderboard
+
+        </button>
+    </a>
+
+    <br><br>
+
+    <!-- Chatbot Toggle -->
+    <button
+        type="button"
+        id="chatbot-btn"
+        onclick="toggleChatbot()">
+
+        💬 Open Resume Chatbot
+
+    </button>
+
+    <!-- Chatbot Area -->
+    <div
+        id="chatbot-container"
+        style="display:none; margin-top:20px;">
+
+        <h3>💬 Resume Chatbot</h3>
+
+        <input
+            type="text"
+            id="chat-message"
+            placeholder="Ask about the candidate..."
+            style="
+                width:80%;
+                padding:10px;
+            ">
+
+    <button
+        type="button"
+        onclick="sendMessage()">
+
+        Send
+
+        </button>
+
+            <br><br>
+
+            <div id="chat-response"></div>
+
+        </div>
+
+</div>
+
+<script>
+
+function toggleChatbot() {
+
+    const chatbot =
+        document.getElementById("chatbot-container");
+
+    if (chatbot.style.display === "none") {
+        chatbot.style.display = "block";
+    } else {
+        chatbot.style.display = "none";
+    }
+}
+
+async function sendMessage() {
+
+    const message =
+        document.getElementById("chat-message").value;
+
+    if (!message.trim()) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch("/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: message
+                })
+            });
+
+        const data = await response.json();
+
+        console.log("DATA RECEIVED:", data);
+
+        
+
+        document.getElementById("chat-response").innerHTML =
+            "<strong>Answer:</strong><br>" +
+            data.answer;
+
+    } catch (error) {
+
+        document.getElementById(
+            "chat-response"
+        ).innerHTML =
+            "<strong>Error:</strong> Unable to contact chatbot.";
+
+        console.error(error);
+    }
+}
+
+</script>
+
+</body>
+</html>
