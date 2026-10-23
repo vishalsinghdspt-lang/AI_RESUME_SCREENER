@@ -5,8 +5,7 @@ python-multipart
 pydantic
 pdfplumber
 pymupdf
-faiss-cpu
-sentence-transformers
+
 google-generativeai
 numpy
 scikit-learn
