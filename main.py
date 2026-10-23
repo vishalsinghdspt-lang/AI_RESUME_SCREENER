@@ -12,9 +12,9 @@ from typing import List
 from pydantic import BaseModel
 
 from fastapi.staticfiles import StaticFiles
-from sympy import content
 
 from app.parser import extract_text
+
 
 from app.text_extractor import extract_text as extract_pdf_text
 from app.semantic_matcher import get_ai_score
