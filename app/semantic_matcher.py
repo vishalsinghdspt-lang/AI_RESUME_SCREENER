@@ -1,24 +1,30 @@
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
+import google.generativeai as genai
+import os
 
-model = None
+genai.configure(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
+
+model = genai.GenerativeModel("gemini-1.5-flash")
+
 
 def get_ai_score(resume_text, jd_text):
-    global model
+    prompt = f"""
+    Compare this resume with the job description.
 
-    if model is None:
-        model = SentenceTransformer(
-            "all-MiniLM-L6-v2"
-        )
+    Resume:
+    {resume_text}
 
-    resume_embedding = model.encode(resume_text)
-    jd_embedding = model.encode(jd_text)
+    Job Description:
+    {jd_text}
 
-    similarity = cosine_similarity(
-        [resume_embedding],
-        [jd_embedding]
-    )[0][0]
+    Return only a match score from 0 to 100.
+    """
 
-    return float(
-        round(similarity * 100, 2)
-    )
+    response = model.generate_content(prompt)
+
+    try:
+        score = float(response.text.strip())
+        return score
+    except:
+        return 50.0
