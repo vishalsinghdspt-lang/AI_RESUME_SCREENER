@@ -6,14 +6,9 @@ genai.configure(
     api_key=os.getenv("GEMINI_API_KEY")
 )
 
-print("===== AVAILABLE MODELS =====")
 
-for m in genai.list_models():
-    print(m.name)
 
-print("===== END MODELS =====")
-
-model = genai.GenerativeModel("models/gemini-1.5-flash")
+model = genai.GenerativeModel("models/gemini-3.5-flash-lite")
 
 
 def get_ai_score(resume_text, jd_text):
