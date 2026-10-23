@@ -86,6 +86,9 @@ async def upload_resume(
         "jobs"
     )
 
+    os.makedirs(resume_folder, exist_ok=True)
+    os.makedirs(job_folder, exist_ok=True)
+
     # Save Job File
 
     job_content = await job.read()
