@@ -23,8 +23,15 @@ Return only a numeric match score from 0 to 100.
 
     try:
         response = model.generate_content(prompt)
+
+        print("GEMINI RESPONSE =", response.text)
+
         score = float(response.text.strip())
+
         return score
+
     except Exception as e:
-        print("Gemini Error:", e)
+
+        print("Gemini Error =", e)
+
         return 50.0
