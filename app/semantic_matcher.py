@@ -1,4 +1,5 @@
 import os
+import re
 import google.generativeai as genai
 
 genai.configure(
@@ -9,6 +10,7 @@ model = genai.GenerativeModel("gemini-pro")
 
 
 def get_ai_score(resume_text, jd_text):
+
     prompt = f"""
 Compare this resume with the job description.
 
@@ -18,17 +20,48 @@ Resume:
 Job Description:
 {jd_text}
 
-Return only a numeric match score from 0 to 100.
+Return ONLY one number between 0 and 100.
+
+Examples:
+
+85
+
+72
+
+91
+
+Do not write:
+ATS Score
+Percentage
+%
+Explanation
+Any sentence
+
+Return only a single numeric value.
 """
 
     try:
+
         response = model.generate_content(prompt)
 
+        print("===================================")
         print("GEMINI RESPONSE =", response.text)
+        print("===================================")
 
-        score = float(response.text.strip())
+        numbers = re.findall(r"\d+", response.text)
 
-        return score
+        if numbers:
+            score = float(numbers[0])
+
+            if score > 100:
+                score = 100
+
+            if score < 0:
+                score = 0
+
+            return score
+
+        return 50.0
 
     except Exception as e:
 
