@@ -6,7 +6,7 @@ genai.configure(
     api_key=os.getenv("GEMINI_API_KEY")
 )
 
-model = genai.GenerativeModel("gemini-pro")
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 
 def get_ai_score(resume_text, jd_text):
@@ -67,4 +67,4 @@ Return only a single numeric value.
 
         print("Gemini Error =", e)
 
-        return 50.0
+        return 0.0
