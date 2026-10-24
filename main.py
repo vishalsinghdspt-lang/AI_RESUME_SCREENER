@@ -742,3 +742,16 @@ async def chat(request: ChatRequest):
     return {
         "answer": answer
     }
+
+@app.get("/debug")
+def debug():
+
+    cursor.execute(
+        "SELECT * FROM candidates"
+    )
+
+    rows = cursor.fetchall()
+
+    return {
+        "data": rows
+    }
