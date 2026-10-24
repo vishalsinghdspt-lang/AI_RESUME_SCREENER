@@ -1,4 +1,7 @@
+from pydoc import text
 import re
+
+from pyparsing import line
 
 SKILLS = [
     "Python",
@@ -67,7 +70,24 @@ def extract_name(text):
 
         line = line.strip()
 
-        if len(line.split()) >= 2 and len(line) < 40:
+        if not line:
+            continue
+
+        # Skip emails
+        if "@" in line:
+            continue
+
+        # Skip phone numbers
+        if any(char.isdigit() for char in line):
+            continue
+
+        # Skip very long lines
+        if len(line) > 40:
+            continue
+
+        words = line.split()
+
+        if len(words) >= 2:
             return line
 
     return "Unknown Candidate"
