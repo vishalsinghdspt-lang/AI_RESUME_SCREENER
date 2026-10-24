@@ -103,6 +103,12 @@ async def upload_resume(
 
     jd_text = extract_text(job_path)
 
+    print("================================")
+    print("JOB DESCRIPTION LENGTH =", len(jd_text))
+    print("FIRST 1000 CHARACTERS OF JD")
+    print(jd_text[:1000])
+    print("================================")
+
     # Clear old leaderboard entries
 
     cursor.execute(
@@ -133,6 +139,12 @@ async def upload_resume(
         resume_text = extract_text(
             resume_path
         )
+
+        print("================================")
+        print("RESUME LENGTH =", len(resume_text))
+        print("FIRST 1000 CHARACTERS OF RESUME")
+        print(resume_text[:1000])
+        print("================================")
 
         global chatbot_chunks
         global chatbot_index

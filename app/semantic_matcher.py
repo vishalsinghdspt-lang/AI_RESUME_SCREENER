@@ -14,7 +14,17 @@ model = genai.GenerativeModel("models/gemini-3.5-flash-lite")
 def get_ai_score(resume_text, jd_text):
 
     prompt = f"""
-Compare this resume with the job description.
+You are an ATS evaluator.
+
+Evaluate the candidate against the job description.
+
+Scoring:
+
+Skills Match = 40 points
+Experience Match = 25 points
+Projects Match = 15 points
+Education Match = 10 points
+Technology Match = 10 points
 
 Resume:
 {resume_text}
@@ -23,50 +33,24 @@ Job Description:
 {jd_text}
 
 Return ONLY one number between 0 and 100.
-
-Examples:
-
-85
-
-72
-
-91
-
-Do not write:
-ATS Score
-Percentage
-%
-Explanation
-Any sentence
-
-Return only a single numeric value.
 """
 
     try:
 
         response = model.generate_content(prompt)
 
-        print("===================================")
-        print("GEMINI RESPONSE =", response.text)
-        print("===================================")
+        result = response.text.strip()
 
-        numbers = re.findall(r"\d+", response.text)
+        print("Gemini Response:", result)
 
-        if numbers:
-            score = float(numbers[0])
+        match = re.search(r"\d+", result)
 
-            if score > 100:
-                score = 100
+        if match:
+            score = float(match.group())
+            return max(0, min(score, 100))
 
-            if score < 0:
-                score = 0
-
-            return score
-
-        return 50.0
+        return 0.0
 
     except Exception as e:
-
-        print("Gemini Error =", e)
-
+        print("Gemini Error:", e)
         return 0.0
