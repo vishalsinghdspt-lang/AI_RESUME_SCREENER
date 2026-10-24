@@ -14,25 +14,48 @@ model = genai.GenerativeModel("models/gemini-3.5-flash-lite")
 def get_ai_score(resume_text, jd_text):
 
     prompt = f"""
-You are an ATS evaluator.
+You are a Senior ATS Resume Evaluator.
 
-Evaluate the candidate against the job description.
-
-Scoring:
-
-Skills Match = 40 points
-Experience Match = 25 points
-Projects Match = 15 points
-Education Match = 10 points
-Technology Match = 10 points
-
-Resume:
-{resume_text}
+Analyze this resume against this job description.
 
 Job Description:
 {jd_text}
 
-Return ONLY one number between 0 and 100.
+Resume:
+{resume_text}
+
+Evaluate:
+
+1. Skills Match
+2. AI/ML Knowledge
+3. Projects Relevance
+4. Education Relevance
+5. Experience Relevance
+
+Give a realistic ATS score.
+
+Scoring Guide:
+
+90-100 = Excellent Match
+70-89 = Strong Match
+50-69 = Moderate Match
+30-49 = Weak Match
+0-29 = Poor Match
+
+Return only one number between 0 and 100.
+
+Examples:
+
+85
+
+72
+
+91
+
+Do not explain.
+Do not give reasons.
+Do not write percentage sign.
+Only return the number.
 """
 
     try:
