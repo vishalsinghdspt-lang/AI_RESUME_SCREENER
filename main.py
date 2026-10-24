@@ -534,6 +534,7 @@ def candidate_report(candidate_id: int):
     skills_html = ""
 
     matched_html = ""
+    missing_html = ""
 
     for skill in matched_skills:
 
@@ -552,6 +553,10 @@ def candidate_report(candidate_id: int):
                 ❌ {skill}
             </span>
             """
+        print("MATCHED SKILLS =", matched_skills)
+        print("MISSING SKILLS =", missing_skills)
+        print("MATCHED_HTML =", matched_html)
+        print("MISSING_HTML =", missing_html)    
 
     for skill in skills:
 
