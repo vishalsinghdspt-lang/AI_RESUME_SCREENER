@@ -543,7 +543,7 @@ def candidate_report(candidate_id: int):
         </span>
         """
 
-        missing_html = ""
+        missing_html = "" 
 
         for skill in missing_skills:
 
