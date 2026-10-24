@@ -1,6 +1,9 @@
 from pydoc import text
 import re
 
+import os
+import google.generativeai as genai
+
 from pyparsing import line
 
 SKILLS = [
@@ -29,6 +32,14 @@ SKILLS = [
     "Docker"
 ]
 
+genai.configure(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
+
+model = genai.GenerativeModel(
+    "gemini-1.5-flash"
+)
+
 
 def extract_email(text):
 
@@ -52,15 +63,56 @@ def extract_phone(text):
 
 def extract_skills(text):
 
-    found_skills = []
+    prompt = f"""
+    Extract all skills from this resume.
 
-    for skill in SKILLS:
+    Include:
 
-        if skill.lower() in text.lower():
+    - Technical Skills
+    - Programming Languages
+    - Frameworks
+    - Databases
+    - Cloud Platforms
+    - Tools
+    - Software
+    - Methodologies
+    - Business Skills
+    - Management Skills
+    - Marketing Skills
+    - Soft Skills
+    - Design Skills
 
-            found_skills.append(skill)
+    Return only comma separated skills.
 
-    return found_skills
+    Resume:
+
+    {text}
+    """
+
+    try:
+
+        response = model.generate_content(
+            prompt
+        )
+
+        skills_text = response.text.strip()
+
+        skills = [
+            skill.strip()
+            for skill in skills_text.split(",")
+            if skill.strip()
+        ]
+
+        return skills
+
+    except Exception as e:
+
+        print(
+            "Skill Extraction Error:",
+            e
+        )
+
+        return []
 
 def extract_name(text):
 
