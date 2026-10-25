@@ -9,7 +9,9 @@ genai.configure(
 
 
 
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel(
+    "models/gemini-3.8-flash"
+)
 
 
 def get_ai_score(resume_text, jd_text):
@@ -76,5 +78,7 @@ Examples:
         return 0.0
 
     except Exception as e:
+
         print("Gemini Error:", e)
-        return 0.0
+
+        return 50.0
