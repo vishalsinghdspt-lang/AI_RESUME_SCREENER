@@ -567,6 +567,7 @@ def candidate_report(candidate_id: int):
                 ❌ {skill}
             </span>
             """
+        print("MISSING_HTML =", missing_html)
         print("MATCHED SKILLS =", matched_skills)
         print("MISSING SKILLS =", missing_skills)
         print("MATCHED_HTML =", matched_html)
