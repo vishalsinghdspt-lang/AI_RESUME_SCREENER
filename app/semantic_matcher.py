@@ -1,5 +1,6 @@
 import os
 import re
+from unittest import result
 import google.generativeai as genai
 
 genai.configure(
@@ -8,41 +9,39 @@ genai.configure(
 
 
 
-model = genai.GenerativeModel("models/gemini-3.5-flash-lite")
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 
 def get_ai_score(resume_text, jd_text):
 
     prompt = f"""
-You are a Senior ATS Resume Evaluator.
+You are an expert ATS system.
 
-Analyze this resume against this job description.
+Compare the resume with the job description.
 
-Job Description:
+JOB DESCRIPTION:
 {jd_text}
 
-Resume:
+RESUME:
 {resume_text}
 
-Evaluate:
+Score based on:
 
-1. Skills Match
-2. AI/ML Knowledge
-3. Projects Relevance
-4. Education Relevance
-5. Experience Relevance
+- Skills Match (40%)
+- Experience Relevance (25%)
+- Project Relevance (15%)
+- Education Relevance (10%)
+- Keyword Match (10%)
 
-Give a realistic ATS score.
-
-Scoring Guide:
+Scoring Rules:
 
 90-100 = Excellent Match
-70-89 = Strong Match
-50-69 = Moderate Match
-30-49 = Weak Match
-0-29 = Poor Match
+75-89 = Strong Match
+60-74 = Moderate Match
+40-59 = Weak Match
+0-39 = Poor Match
 
-Return only one number between 0 and 100.
+Return ONLY one number between 0 and 100.
 
 Examples:
 
@@ -51,11 +50,6 @@ Examples:
 72
 
 91
-
-Do not explain.
-Do not give reasons.
-Do not write percentage sign.
-Only return the number.
 """
 
     try:
@@ -64,12 +58,19 @@ Only return the number.
 
         result = response.text.strip()
 
-        print("Gemini Response:", result)
+        print("========== GEMINI ==========")
+        print(result)
+        print("============================")
 
-        match = re.search(r"\d+", result)
+        match = re.search(
+            r"(\d+(\.\d+)?)",
+            result
+        )
 
         if match:
-            score = float(match.group())
+            score = float(
+                match.group(1)
+            )
             return max(0, min(score, 100))
 
         return 0.0
