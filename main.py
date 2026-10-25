@@ -111,11 +111,7 @@ async def upload_resume(
 
     # Clear old leaderboard entries
 
-    cursor.execute(
-    "DELETE FROM candidates"
-)
-
-    conn.commit()
+    
 
     results = []
 
