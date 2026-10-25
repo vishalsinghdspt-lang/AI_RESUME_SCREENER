@@ -527,6 +527,12 @@ def candidate_report(candidate_id: int):
         if skill not in matched_skills:
 
             missing_skills.append(skill)
+            print("================================")
+            print("Candidate Skills:", skills)
+            print("JD Skills:", jd_skills)
+            print("Matched Skills:", matched_skills)
+            print("Missing Skills:", missing_skills)
+            print("================================")
 
     score = candidate[5]
 
