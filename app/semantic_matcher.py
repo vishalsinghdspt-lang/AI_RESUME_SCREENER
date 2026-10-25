@@ -81,4 +81,21 @@ Examples:
 
         print("Gemini Error:", e)
 
+        resume_words = resume_text.lower().split()
+        jd_words = jd_text.lower().split()
+
+        common = set(resume_words) & set(jd_words)
+
+        if len(jd_words) > 0:
+
+            score = (
+                len(common)
+                / len(set(jd_words))
+            ) * 100
+
+            return round(
+                min(score, 100),
+                2
+            )
+
         return 50.0
