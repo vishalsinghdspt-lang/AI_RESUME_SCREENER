@@ -474,6 +474,28 @@ font-size:16px;
 
 </a>
 
+<br><br>
+
+<a href="/clear-database"
+onclick="return confirm('Delete all candidates?')">
+
+<button style="
+padding:12px 20px;
+background:#dc2626;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+font-weight:bold;
+">
+
+🗑️ Clear All Candidates
+
+</button>
+
+</a>
+
 </center>
 
 </div>
@@ -775,3 +797,21 @@ def debug():
     return {
         "data": rows
     }
+
+@app.get("/clear-database")
+def clear_database():
+
+    cursor.execute(
+        "DELETE FROM candidates"
+    )
+
+    cursor.execute(
+        "DELETE FROM sqlite_sequence WHERE name='candidates'"
+    )
+
+    conn.commit()
+
+    return RedirectResponse(
+        url="/",
+        status_code=303
+    )
