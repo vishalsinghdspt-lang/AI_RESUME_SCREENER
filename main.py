@@ -206,6 +206,18 @@ async def upload_resume(
 
         conn.commit()
 
+        cursor.execute(
+            "SELECT last_insert_rowid()"
+        )
+
+        new_id = cursor.fetchone()[0]
+
+        print("========== SAVED ==========")
+        print("NAME =", name)
+        print("ID =", new_id)
+        print("SCORE =", ai_score)
+        print("===========================")
+
         results.append({
             "email": email[0] if email else "",
             "phone": phone[0] if phone else "",
