@@ -63,56 +63,253 @@ def extract_phone(text):
 
 def extract_skills(text):
 
-    prompt = f"""
-    Extract all skills from this resume.
+    skill_database = [
 
-    Include:
+    # Programming Languages
+    "Python",
+    "Java",
+    "C",
+    "C++",
+    "C#",
+    "JavaScript",
+    "TypeScript",
+    "Go",
+    "Rust",
+    "Kotlin",
+    "Swift",
+    "PHP",
+    "Ruby",
+    "Scala",
+    "R",
+    "MATLAB",
 
-    - Technical Skills
-    - Programming Languages
-    - Frameworks
-    - Databases
-    - Cloud Platforms
-    - Tools
-    - Software
-    - Methodologies
-    - Business Skills
-    - Management Skills
-    - Marketing Skills
-    - Soft Skills
-    - Design Skills
+    # Frontend
+    "HTML",
+    "CSS",
+    "Bootstrap",
+    "Tailwind CSS",
+    "SASS",
+    "React",
+    "Next.js",
+    "Angular",
+    "Vue.js",
+    "Redux",
+    "jQuery",
 
-    Return only comma separated skills.
+    # Backend
+    "Node.js",
+    "Express.js",
+    "FastAPI",
+    "Flask",
+    "Django",
+    "Spring Boot",
+    "ASP.NET",
+    "Laravel",
 
-    Resume:
+    # Databases
+    "SQL",
+    "MySQL",
+    "PostgreSQL",
+    "MongoDB",
+    "SQLite",
+    "Oracle",
+    "Redis",
+    "Firebase",
+    "Supabase",
+    "Cassandra",
 
-    {text}
-    """
+    # Cloud
+    "AWS",
+    "Azure",
+    "Google Cloud",
+    "GCP",
+    "Cloud Computing",
+    "EC2",
+    "S3",
+    "Lambda",
 
-    try:
+    # DevOps
+    "Docker",
+    "Kubernetes",
+    "Git",
+    "GitHub",
+    "GitLab",
+    "CI/CD",
+    "Jenkins",
+    "Terraform",
+    "Ansible",
+    "Linux",
+    "Bash",
+    "Shell Scripting",
 
-        response = model.generate_content(
-            prompt
-        )
+    # Data Science
+    "Pandas",
+    "NumPy",
+    "Matplotlib",
+    "Seaborn",
+    "Plotly",
+    "Data Analysis",
+    "Data Visualization",
+    "Statistics",
+    "EDA",
 
-        skills_text = response.text.strip()
+    # Machine Learning
+    "Machine Learning",
+    "Deep Learning",
+    "Supervised Learning",
+    "Unsupervised Learning",
+    "Regression",
+    "Classification",
+    "Clustering",
+    "Feature Engineering",
+    "Scikit-learn",
 
-        skills = [
-            skill.strip()
-            for skill in skills_text.split(",")
-            if skill.strip()
-        ]
+    # AI
+    "Artificial Intelligence",
+    "Generative AI",
+    "Prompt Engineering",
+    "LLM",
+    "Large Language Models",
+    "LangChain",
+    "RAG",
+    "Vector Database",
+    "Embedding",
+    "OpenAI",
+    "Gemini",
+    "Hugging Face",
 
-        return skills
+    # NLP
+    "Natural Language Processing",
+    "NLP",
+    "Text Mining",
+    "Sentiment Analysis",
+    "Transformers",
+    "BERT",
 
-    except Exception as e:
+    # Deep Learning Frameworks
+    "TensorFlow",
+    "Keras",
+    "PyTorch",
 
-        print(
-            "Skill Extraction Error:",
-            e
-        )
+    # Computer Vision
+    "Computer Vision",
+    "OpenCV",
+    "YOLO",
+    "Image Processing",
+    "Object Detection",
 
-        return []
+    # Cybersecurity
+    "Cyber Security",
+    "Network Security",
+    "Penetration Testing",
+    "Ethical Hacking",
+    "Kali Linux",
+    "Burp Suite",
+    "OWASP",
+    "Cryptography",
+
+    # Networking
+    "Computer Networks",
+    "TCP/IP",
+    "DNS",
+    "HTTP",
+    "HTTPS",
+    "Routing",
+    "Switching",
+
+    # Operating Systems
+    "Operating Systems",
+    "Linux",
+    "Unix",
+    "Windows Server",
+
+    # Core CS Subjects
+    "Data Structures",
+    "Algorithms",
+    "DBMS",
+    "OOP",
+    "Operating System",
+    "Computer Networks",
+    "System Design",
+
+    # Mobile Development
+    "Android",
+    "Android Studio",
+    "Flutter",
+    "React Native",
+    "Swift",
+    "Kotlin",
+
+    # Software Testing
+    "Unit Testing",
+    "Selenium",
+    "Junit",
+    "Pytest",
+    "Postman",
+    "API Testing",
+
+    # Data Engineering
+    "ETL",
+    "Apache Spark",
+    "Kafka",
+    "Hadoop",
+    "Data Warehouse",
+
+    # Blockchain
+    "Blockchain",
+    "Ethereum",
+    "Solidity",
+    "Web3",
+
+    # UI/UX
+    "Figma",
+    "Adobe XD",
+    "UI Design",
+    "UX Design",
+    "Wireframing",
+    "Prototyping",
+
+    # Business Intelligence
+    "Power BI",
+    "Tableau",
+    "Looker",
+
+    # Tools
+    "VS Code",
+    "Jupyter Notebook",
+    "PyCharm",
+    "IntelliJ",
+    "Eclipse",
+
+    # Soft Skills
+    "Leadership",
+    "Communication",
+    "Problem Solving",
+    "Teamwork",
+    "Critical Thinking",
+    "Analytical Skills",
+    "Project Management",
+    "Time Management",
+
+    # ATS / Resume Skills
+    "Agile",
+    "Scrum",
+    "Kanban",
+    "Product Management",
+    "Software Development",
+    "Software Engineering"
+]
+
+    found_skills = []
+
+    text_lower = text.lower()
+
+    for skill in skill_database:
+
+        if skill.lower() in text_lower and skill not in found_skills:
+            found_skills.append(skill)
+
+    return found_skills
 
 def extract_name(text):
 
