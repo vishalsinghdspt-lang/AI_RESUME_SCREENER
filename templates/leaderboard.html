@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#070a13">
+<title>Leaderboard · AI Resume Screener</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/app.css?v=2">
+</head>
+<body data-page="board">
+
+<div class="bg" aria-hidden="true"><div class="bg-grid"></div></div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/#dashboard" aria-label="AI Resume Screener home">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+        <rect width="32" height="32" rx="9" fill="url(#lg)"/>
+        <path d="M11 8h7l4 4v12H11z" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M21.5 17.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z" fill="#fff"/>
+      </svg>
+      <span>Resume Screener</span><span class="brand-tag">AI</span>
+    </a>
+    <nav class="nav-links" id="nav-links" aria-label="Main">
+      <a data-nav="dashboard" href="/#dashboard">Dashboard</a>
+      <a data-nav="screening" href="/#screening">Resume Screening</a>
+      <a data-nav="board" href="/leaderboard">Leaderboard</a>
+      <a data-nav="assistant" href="/#assistant">AI Assistant</a>
+    </nav>
+    <a class="btn btn-primary btn-sm nav-cta" href="/#screening">Analyze Candidates</a>
+    <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+      <svg class="ico"><use href="#i-menu"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head reveal">
+    <div>
+      <p class="eyebrow">Leaderboard</p>
+      <h1 class="page-title">Candidate rankings</h1>
+      <p>Ranked by AI match score. Strong ≥ 80% · Moderate 50–79% · Low &lt; 50%.</p>
+    </div>
+    <a class="btn btn-primary" href="/#screening">Analyze Candidates</a>
+  </div>
+
+  <div class="toolbar reveal" id="toolbar" style="--i:1" hidden>
+    <div class="field">
+      <svg class="ico"><use href="#i-search"/></svg>
+      <input type="search" id="q" placeholder="Search by name or skill" aria-label="Search candidates">
+    </div>
+    <div class="seg-ctl" id="tiers" role="group" aria-label="Filter by match level">
+      <button type="button" data-tier="all" aria-pressed="true">All</button>
+      <button type="button" data-tier="strong" aria-pressed="false">Strong</button>
+      <button type="button" data-tier="mid" aria-pressed="false">Moderate</button>
+      <button type="button" data-tier="low" aria-pressed="false">Low</button>
+    </div>
+    <select id="sort" aria-label="Sort candidates">
+      <option value="score-desc">Score: high to low</option>
+      <option value="score-asc">Score: low to high</option>
+      <option value="name">Name: A to Z</option>
+    </select>
+  </div>
+
+  <p class="muted result-count" id="count" aria-live="polite"></p>
+
+  <div class="board" id="board"><p class="muted">Loading candidates…</p></div>
+
+  <div class="page-foot" id="foot" hidden>
+    <a class="btn btn-secondary" href="/#dashboard">Back to dashboard</a>
+    <button class="btn btn-danger" id="clear" type="button"><svg class="ico"><use href="#i-trash"/></svg>Clear all candidates</button>
+  </div>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

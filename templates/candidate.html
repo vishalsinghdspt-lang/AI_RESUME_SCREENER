@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#070a13">
+<title>Candidate Report · AI Resume Screener</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/app.css?v=2">
+</head>
+<body data-page="candidate">
+
+<div class="bg" aria-hidden="true"><div class="bg-grid"></div></div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/#dashboard" aria-label="AI Resume Screener home">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+        <rect width="32" height="32" rx="9" fill="url(#lg)"/>
+        <path d="M11 8h7l4 4v12H11z" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M21.5 17.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z" fill="#fff"/>
+      </svg>
+      <span>Resume Screener</span><span class="brand-tag">AI</span>
+    </a>
+    <nav class="nav-links" id="nav-links" aria-label="Main">
+      <a data-nav="dashboard" href="/#dashboard">Dashboard</a>
+      <a data-nav="screening" href="/#screening">Resume Screening</a>
+      <a data-nav="board" href="/leaderboard">Leaderboard</a>
+      <a data-nav="assistant" href="/#assistant">AI Assistant</a>
+    </nav>
+    <a class="btn btn-primary btn-sm nav-cta" href="/#screening">Analyze Candidates</a>
+    <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+      <svg class="ico"><use href="#i-menu"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <a class="back" href="/leaderboard"><svg class="ico"><use href="#i-arrow-left"/></svg>Back to leaderboard</a>
+  <div id="report"><p class="muted">Loading report…</p></div>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

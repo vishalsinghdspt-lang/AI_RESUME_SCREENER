@@ -1,191 +1,177 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AI Resume Screener</title>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
-        rel="stylesheet">
-
-    <link
-        rel="stylesheet"
-        href="/static/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#070a13">
+<title>AI Resume Screener</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/app.css?v=2">
 </head>
+<body data-page="home">
 
-<body>
+<div class="bg" aria-hidden="true"><div class="bg-grid"></div></div>
 
-<div class="container">
-
-    <h1>🚀 AI Resume Screener</h1>
-
-    <div class="badge">
-        AI Powered Recruitment Assistant
-    </div>
-
-    <p class="subtitle">
-        Find the best candidate using AI-powered resume matching
-    </p>
-
-    <div class="stats">
-
-        <div class="stat-card">
-            <h2>95%</h2>
-            <p>Resume Accuracy</p>
-        </div>
-
-        <div class="stat-card">
-            <h2>AI</h2>
-            <p>Semantic Matching</p>
-        </div>
-
-    </div>
-
-    <!-- Upload Form -->
-    <form
-        action="/upload"
-        method="post"
-        enctype="multipart/form-data">
-
-        <div class="upload-box">
-            <h3>📄 Upload Resume</h3>
-
-            <input
-                type="file"
-                name="resumes"
-                multiple
-                required>
-        </div>
-
-        <div class="upload-box">
-            <h3>💼 Upload Job Description</h3>
-
-            <input
-                type="file"
-                name="job"
-                required>
-        </div>
-
-        <button type="submit">
-            Screen Candidate
-        </button>
-
-    </form>
-
-    <br><br>
-
-    <!-- Leaderboard Button -->
-    <a href="/leaderboard">
-        <button
-            type="button"
-            class="leaderboard-btn">
-
-            🏆 View Leaderboard
-
-        </button>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/#dashboard" aria-label="AI Resume Screener home">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+        <rect width="32" height="32" rx="9" fill="url(#lg)"/>
+        <path d="M11 8h7l4 4v12H11z" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M21.5 17.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z" fill="#fff"/>
+      </svg>
+      <span>Resume Screener</span><span class="brand-tag">AI</span>
     </a>
-
-    <br><br>
-
-    <!-- Chatbot Toggle -->
-    <button
-        type="button"
-        id="chatbot-btn"
-        onclick="toggleChatbot()">
-
-        💬 Open Resume Chatbot
-
+    <nav class="nav-links" id="nav-links" aria-label="Main">
+      <a data-nav="dashboard" href="/#dashboard">Dashboard</a>
+      <a data-nav="screening" href="/#screening">Resume Screening</a>
+      <a data-nav="board" href="/leaderboard">Leaderboard</a>
+      <a data-nav="assistant" href="/#assistant">AI Assistant</a>
+    </nav>
+    <a class="btn btn-primary btn-sm nav-cta" href="/#screening">Analyze Candidates</a>
+    <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+      <svg class="ico"><use href="#i-menu"/></svg>
     </button>
+  </div>
+</header>
 
-    <!-- Chatbot Area -->
-    <div
-        id="chatbot-container"
-        style="display:none; margin-top:20px;">
+<main class="wrap">
 
-        <h3>💬 Resume Chatbot</h3>
+  <!-- ============ DASHBOARD ============ -->
+  <section class="view" id="view-dashboard">
+    <div class="hero">
+      <div class="status-pill reveal" id="status"><span class="dot"></span><span id="status-text">Checking server…</span></div>
+      <h1 class="hero-title reveal" style="--i:1">
+        <span class="line">Recruit Smarter.</span>
+        <span class="line grad">Discover Better.</span>
+      </h1>
+      <p class="hero-sub reveal" style="--i:2">AI-powered resume intelligence that identifies the right talent with precision, speed and deeper understanding.</p>
+      <div class="hero-actions reveal" style="--i:3">
+        <a class="btn btn-primary" href="#screening"><svg class="ico"><use href="#i-sparkles"/></svg>Analyze Candidates</a>
+        <a class="btn btn-secondary" href="/leaderboard"><svg class="ico"><use href="#i-chart"/></svg>View Leaderboard</a>
+        <a class="btn btn-ai" href="#assistant"><svg class="ico"><use href="#i-chat"/></svg>Open AI Assistant</a>
+      </div>
+    </div>
 
-        <input
-            type="text"
-            id="chat-message"
-            placeholder="Ask about the candidate..."
-            style="
-                width:80%;
-                padding:10px;
-            ">
+    <div class="grid-stats">
+      <div class="panel stat reveal" style="--i:4"><div class="stat-label">Resumes processed</div><div class="stat-value" id="s-total">—</div><div class="stat-foot" id="f-total">Candidates in the database</div></div>
+      <div class="panel stat reveal" style="--i:5"><div class="stat-label">Average match score</div><div class="stat-value" id="s-avg">—</div><div class="stat-foot">Across all screened resumes</div></div>
+      <div class="panel stat reveal" style="--i:6"><div class="stat-label">Strong matches</div><div class="stat-value" id="s-strong">—</div><div class="stat-foot">Scoring 80% or higher</div></div>
+      <div class="panel stat reveal" style="--i:7"><div class="stat-label">Highest score</div><div class="stat-value" id="s-top">—</div><div class="stat-foot" id="f-top">No candidates yet</div></div>
+    </div>
 
-    <button
-        type="button"
-        onclick="sendMessage()">
+    <div class="grid-2">
+      <div class="panel card reveal" style="--i:8">
+        <h3>Match distribution</h3>
+        <p class="sub">Strong ≥ 80% · Moderate 50–79% · Low &lt; 50%</p>
+        <div id="dist"></div>
+      </div>
+      <div class="panel card reveal" style="--i:9">
+        <h3>Top candidates</h3>
+        <p class="sub">Highest AI match scores</p>
+        <div id="top-list" style="margin-top:12px"></div>
+      </div>
+    </div>
+  </section>
 
-        Send
+  <!-- ============ SCREENING ============ -->
+  <section class="view" id="view-screening" hidden>
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Resume screening</p>
+        <h2>Upload and analyze</h2>
+        <p>Add PDF resumes and a PDF job description. Each resume is scored against the job description by the AI matcher.</p>
+      </div>
+    </div>
 
-        </button>
+    <form id="screen-form" action="/upload" method="post" enctype="multipart/form-data" novalidate>
+      <div class="upload-grid">
 
-            <br><br>
-
-            <div id="chat-response"></div>
-
+        <div class="reveal">
+          <label class="drop" id="drop-resumes">
+            <input type="file" id="resume-input" name="resumes" accept="application/pdf,.pdf" multiple>
+            <span class="drop-icon"><svg class="ico ico-lg"><use href="#i-doc"/></svg></span>
+            <strong>Drop your resumes here</strong>
+            <span class="muted">PDF only · you can select several files at once</span>
+            <span class="btn btn-secondary btn-sm">Browse files</span>
+          </label>
+          <p class="msg-line" id="resume-msg" role="alert"></p>
+          <ul class="files" id="resume-list"></ul>
         </div>
 
+        <div class="reveal" style="--i:1">
+          <label class="drop" id="drop-job">
+            <input type="file" id="job-input" name="job" accept="application/pdf,.pdf">
+            <span class="drop-icon"><svg class="ico ico-lg"><use href="#i-briefcase"/></svg></span>
+            <strong>Add your job description</strong>
+            <span class="muted">One PDF file</span>
+            <span class="btn btn-secondary btn-sm">Choose file</span>
+          </label>
+          <p class="msg-line" id="job-msg" role="alert"></p>
+          <ul class="files" id="job-list"></ul>
+        </div>
+
+      </div>
+
+      <div class="action-bar reveal" style="--i:2">
+        <p class="muted" id="summary">Add at least one resume and a job description to begin.</p>
+        <a class="btn btn-secondary" href="/leaderboard">View Leaderboard</a>
+        <button class="btn btn-primary" id="analyze" type="submit" disabled>Analyze Candidates</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ============ ASSISTANT ============ -->
+  <section class="view" id="view-assistant" hidden>
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">AI Assistant</p>
+        <h2>Ask about a candidate</h2>
+        <p>The assistant answers from the most recently screened resume.</p>
+      </div>
+      <a class="btn btn-secondary btn-sm" href="#screening">Screen a resume</a>
+    </div>
+
+    <div class="panel chat reveal">
+      <div class="chat-log" id="chat-log" aria-live="polite"></div>
+      <div class="chips" id="chips">
+        <button type="button" class="chip-btn">Summarize this candidate</button>
+        <button type="button" class="chip-btn">What are the key skills?</button>
+        <button type="button" class="chip-btn">Describe the work experience</button>
+        <button type="button" class="chip-btn">What projects has the candidate built?</button>
+        <button type="button" class="chip-btn">What is the candidate's education?</button>
+      </div>
+      <form class="composer" id="chat-form" autocomplete="off">
+        <label class="sr-only" for="chat-message">Message</label>
+        <textarea id="chat-message" rows="1" placeholder="Ask about the candidate…"></textarea>
+        <button class="btn btn-primary btn-icon" id="chat-send" type="submit" aria-label="Send message"><svg class="ico"><use href="#i-send"/></svg></button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<!-- Processing modal -->
+<div class="overlay" id="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="ov-title">
+  <div class="modal" id="modal">
+    <h3 id="ov-title">Screening in progress</h3>
+    <p id="ov-sub">Your files are being uploaded.</p>
+    <ol class="steps">
+      <li>Uploading files <em id="ov-pct">0%</em></li>
+      <li>AI analysis</li>
+      <li>Results ready</li>
+    </ol>
+    <div class="progress" id="ov-progress"><i></i></div>
+    <p class="modal-error" id="ov-error" role="alert" hidden></p>
+    <div class="modal-actions" id="ov-actions" hidden>
+      <button class="btn btn-secondary" id="ov-close" type="button">Close</button>
+    </div>
+  </div>
 </div>
 
-<script>
-
-function toggleChatbot() {
-
-    const chatbot =
-        document.getElementById("chatbot-container");
-
-    if (chatbot.style.display === "none") {
-        chatbot.style.display = "block";
-    } else {
-        chatbot.style.display = "none";
-    }
-}
-
-async function sendMessage() {
-
-    const message =
-        document.getElementById("chat-message").value;
-
-    if (!message.trim()) {
-        return;
-    }
-
-    try {
-
-        const response =
-            await fetch("/chat", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    message: message
-                })
-            });
-
-        const data = await response.json();
-
-        console.log("DATA RECEIVED:", data);
-
-        
-
-        document.getElementById("chat-response").innerHTML =
-            "<strong>Answer:</strong><br>" +
-            data.answer;
-
-    } catch (error) {
-
-        document.getElementById(
-            "chat-response"
-        ).innerHTML =
-            "<strong>Error:</strong> Unable to contact chatbot.";
-
-        console.error(error);
-    }
-}
-
-</script>
-
+<script src="/static/app.js"></script>
 </body>
 </html>
