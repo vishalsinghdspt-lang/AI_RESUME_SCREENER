@@ -18,3 +18,6 @@ resumes/
 
 # VS Code
 .vscode/
+
+jobs/
+candidates.db
