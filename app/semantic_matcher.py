@@ -1,3 +1,4 @@
+import json
 import os
 import re
 from unittest import result
@@ -14,45 +15,49 @@ model = genai.GenerativeModel(
 )
 
 
-def get_ai_score(resume_text, jd_text):
+def analyze_resume(resume_text, jd_text):
 
     prompt = f"""
-You are an expert ATS system.
+    You are an enterprise ATS system.
 
-Compare the resume with the job description.
+    Analyze the resume against the job description.
 
-JOB DESCRIPTION:
-{jd_text}
+    JOB DESCRIPTION:
+    {jd_text}
 
-RESUME:
-{resume_text}
+    RESUME:
+    {resume_text}
 
-Score based on:
+    Return ONLY valid JSON.
 
-- Skills Match (40%)
-- Experience Relevance (25%)
-- Project Relevance (15%)
-- Education Relevance (10%)
-- Keyword Match (10%)
+    Format:
 
-Scoring Rules:
+    {{
+        "score": 0,
+        "matched_skills": [],
+        "missing_skills": [],
+        "strengths": [],
+        "weaknesses": [],
+        "recommendation": ""
+    }}
 
-90-100 = Excellent Match
-75-89 = Strong Match
-60-74 = Moderate Match
-40-59 = Weak Match
-0-39 = Poor Match
+    Rules:
 
-Return ONLY one number between 0 and 100.
+    1. Compare resume skills against JD skills.
+    2. Consider experience relevance.
+    3. Consider project relevance.
+    4. Consider education relevance.
+    5. Identify strengths.
+    6. Identify weaknesses.
+    7. Give recommendation.
 
-Examples:
+    Recommendation must be:
+    - Strong Match
+    - Consider
+    - Reject
 
-85
-
-72
-
-91
-"""
+    Return JSON only.
+    """
 
     try:
 
@@ -64,38 +69,22 @@ Examples:
         print(result)
         print("============================")
 
-        match = re.search(
-            r"(\d+(\.\d+)?)",
-            result
-        )
+        result = result.replace("```json", "")
+        result = result.replace("```", "")
 
-        if match:
-            score = float(
-                match.group(1)
-            )
-            return max(0, min(score, 100))
+        analysis = json.loads(result)
 
-        return 0.0
+        return analysis
 
     except Exception as e:
 
         print("Gemini Error:", e)
 
-        resume_words = resume_text.lower().split()
-        jd_words = jd_text.lower().split()
-
-        common = set(resume_words) & set(jd_words)
-
-        if len(jd_words) > 0:
-
-            score = (
-                len(common)
-                / len(set(jd_words))
-            ) * 100
-
-            return round(
-                min(score, 100),
-                2
-            )
-
-        return 50.0
+        return {
+            "score": 0,
+            "matched_skills": [],
+            "missing_skills": [],
+            "strengths": [],
+            "weaknesses": [],
+            "recommendation": "Reject"
+        }

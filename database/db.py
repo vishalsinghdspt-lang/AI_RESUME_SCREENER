@@ -13,8 +13,13 @@ CREATE TABLE IF NOT EXISTS candidates (
     name TEXT,
     email TEXT,
     phone TEXT,
+
     skills TEXT,
-    score REAL
+    score REAL,
+
+    jd_skills TEXT,
+    matched_skills TEXT,
+    missing_skills TEXT
 )
 """)
 

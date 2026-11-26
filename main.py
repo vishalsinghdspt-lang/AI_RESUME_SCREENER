@@ -18,7 +18,7 @@ from app.parser import extract_text
 
 
 from app.text_extractor import extract_text as extract_pdf_text
-from app.semantic_matcher import get_ai_score
+from app.semantic_matcher import analyze_resume
 
 from app.extractor import (
     extract_email,
@@ -103,6 +103,11 @@ async def upload_resume(
         f.write(job_content)
 
     jd_text = extract_text(job_path)
+    jd_skills = extract_skills(jd_text)
+
+    print("================================")
+    print("JD SKILLS =", jd_skills)
+    print("================================")
 
     print("================================")
     print("JOB DESCRIPTION LENGTH =", len(jd_text))
@@ -159,12 +164,23 @@ async def upload_resume(
             vectors
         )
 
-        ai_score = get_ai_score(
+        analysis = analyze_resume(
             resume_text,
             jd_text
         )
 
-        ai_score = float(ai_score)
+        
+        ai_score = float(analysis["score"])
+
+        matched_skills = analysis["matched_skills"]
+
+        missing_skills = analysis["missing_skills"]
+
+        strengths = analysis["strengths"]
+
+        weaknesses = analysis["weaknesses"]
+
+        recommendation = analysis["recommendation"]
 
         print("AI SCORE =", ai_score)
         print("TYPE =", type(ai_score))
@@ -181,6 +197,21 @@ async def upload_resume(
             resume_text
         )
 
+        matched_skills = [
+            skill
+            for skill in jd_skills
+            if skill in skills
+        ]
+
+        missing_skills = [
+            skill
+            for skill in jd_skills
+            if skill not in skills
+        ]
+
+        print("MATCHED =", matched_skills)
+        print("MISSING =", missing_skills)
+
         name = extract_name(
         resume_text
         )
@@ -189,15 +220,27 @@ async def upload_resume(
         cursor.execute(
             """
             INSERT INTO candidates
-            (name, email, phone, skills, score)
-            VALUES (?, ?, ?, ?, ?)
+            (
+                name,
+                email,
+                phone,
+                skills,
+                score,
+                jd_skills,
+                matched_skills,
+                missing_skills
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 name,
                 email[0] if email else "",
                 phone[0] if phone else "",
                 ",".join(skills),
-                ai_score
+                ai_score,
+                ",".join(jd_skills),
+                ",".join(matched_skills),
+                ",".join(missing_skills)
             )
         )
 
@@ -314,19 +357,6 @@ def leaderboard():
 def candidate_report(candidate_id: int):
     return FileResponse("templates/candidate.html")
 
-
-# Same reference list the old report page used (not the uploaded JD)
-REFERENCE_SKILLS = [
-    "Python",
-    "React.js",
-    "AWS",
-    "Docker",
-    "Kubernetes",
-    "HTML",
-    "CSS"
-]
-
-
 @app.get("/api/candidate/{candidate_id}")
 def candidate_api(candidate_id: int):
 
@@ -344,8 +374,23 @@ def candidate_api(candidate_id: int):
         if s.strip()
     ]
 
-    matched = [s for s in REFERENCE_SKILLS if s in skills]
-    missing = [s for s in REFERENCE_SKILLS if s not in skills]
+    jd_skills = [
+    s.strip()
+    for s in (candidate[6] or "").split(",")
+    if s.strip()
+    ]
+
+    matched_skills = [
+        s.strip()
+        for s in (candidate[7] or "").split(",")
+        if s.strip()
+    ]
+
+    missing_skills = [
+        s.strip()
+        for s in (candidate[8] or "").split(",")
+        if s.strip()
+    ]
 
     score = candidate[5] or 0
 
@@ -364,9 +409,9 @@ def candidate_api(candidate_id: int):
         "skills": skills,
         "score": score,
         "recommendation": recommendation,
-        "matched_skills": matched,
-        "missing_skills": missing,
-        "reference_skills": REFERENCE_SKILLS
+        "matched_skills": matched_skills,
+        "missing_skills": missing_skills,
+        "reference_skills": jd_skills
     }
 
 @app.post("/chat")
